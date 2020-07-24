@@ -23,6 +23,7 @@ class Pic(Resource):
 
         return response
 
+
 class Photos(Resource):
     def get(self):
         if os.path.exists('pics/'):
@@ -55,6 +56,7 @@ class Photos(Resource):
 
         return "Picture deleted.", 200
 
+
 class DisplayPhoto(Resource):
     def put(self):
         try:
@@ -71,6 +73,7 @@ class DisplayPhoto(Resource):
             return "Something went wrong encoding JSON, try again.", 409
         
         return "Successfully set display picture.", 200
+        
 
 class DownloadPhotos(Resource):
     def get(self):
@@ -79,6 +82,7 @@ class DownloadPhotos(Resource):
         d.refresh_photos()
 
         return "Pictures have been refreshed.", 200
+
 
 class Modes(Resource):
     def get(self):
@@ -93,6 +97,34 @@ class Modes(Resource):
         }
 
         return response, 200
+
+
+class ChangeMode(Resource):
+    def put(self):
+        try:
+            with open('settings.json', 'r') as f:
+                settings = json.load(f)
+        except json.decoder.JSONDecodeError:
+            return "Something went wrong decoding JSON, try again.", 409
+        modes = settings['modes']
+        modeNames = set([m['name'] for m in modes])
+        newName = request.json['data']
+        if newName in modeNames:
+            settings['mode'] = newName
+            for entry in settings['modes']:
+                if entry['name'] == newName:
+                    entry['active'] = True
+                else:
+                    entry['active'] = False
+            try:
+                with open('settings.json', 'w') as f:
+                    json.dump(settings, f)
+            except json.decoder.JSONDecodeError:
+                return "Something went wrong decoding JSON, try again.", 409
+            return f"Changed mode to {newName}.", 200
+        else:
+            return "Invalid mode name.", 400
+
 
 class DeviceName(Resource):
     def get(self):
@@ -125,31 +157,6 @@ class DeviceName(Resource):
         
         return "Device name updated.", 200
 
-class ChangeMode(Resource):
-    def put(self):
-        try:
-            with open('settings.json', 'r') as f:
-                settings = json.load(f)
-        except json.decoder.JSONDecodeError:
-            return "Something went wrong decoding JSON, try again.", 409
-        modes = settings['modes']
-        modeNames = set([m['name'] for m in modes])
-        newName = request.json['data']
-        if newName in modeNames:
-            settings['mode'] = newName
-            for entry in settings['modes']:
-                if entry['name'] == newName:
-                    entry['active'] = True
-                else:
-                    entry['active'] = False
-            try:
-                with open('settings.json', 'w') as f:
-                    json.dump(settings, f)
-            except json.decoder.JSONDecodeError:
-                return "Something went wrong decoding JSON, try again.", 409
-            return f"Changed mode to {newName}.", 200
-        else:
-            return "Invalid mode name.", 400
 
 class Log(Resource):
     def get(self):
@@ -162,6 +169,7 @@ class Log(Resource):
         else:
             return "No log created.", 400
 
+
 class DeletePic(Resource):
     def put(self):
         picToDelete = request.form['data']
@@ -170,6 +178,7 @@ class DeletePic(Resource):
             return "Deleted picture.", 200
         else:
             return f"Couldn't find selected picture ({picToDelete}) to delete.", 400
+
 
 class Settings(Resource):
     def get(self):
@@ -183,7 +192,7 @@ class Settings(Resource):
         response = {
             'response': settings
         }
-
+        
         return response, 200
 
     def put(self):
@@ -204,16 +213,16 @@ class Settings(Resource):
         return "Updated settings.", 200
 
 
-api.add_resource(Photos, '/photos/')
-api.add_resource(DownloadPhotos, '/download_photos/')
+api.add_resource(Pic, '/pic/<string:filename>')
+api.add_resource(Photos, '/photos/', '/photos/<string:filename>')
 api.add_resource(DisplayPhoto, '/display_photo/')
+api.add_resource(DownloadPhotos, '/download_photos/')
 api.add_resource(Modes, '/modes/')
 api.add_resource(ChangeMode, '/changemode/')
-api.add_resource(Log, '/log/')
 api.add_resource(DeviceName, '/name/')
+api.add_resource(Log, '/log/')
 api.add_resource(DeletePic, '/delete/')
 api.add_resource(Settings, '/settings/')
-api.add_resource(Pic, '/pic/<string:filename>')
 
 if __name__ == '__main__':
     hostname = socket.gethostname()
