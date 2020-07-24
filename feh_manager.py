@@ -1,7 +1,8 @@
-import os
 import json
-from threading import Thread
+import os
 import time
+from threading import Thread
+
 
 def main():
     
