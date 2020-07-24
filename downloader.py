@@ -1,17 +1,19 @@
-import os
-import sys
-from datetime import datetime
-import time
 import base64
-import pickle
-import imaplib
-import smtplib
 import email
-from email.mime.multipart import MIMEMultipart 
-from email.mime.text import MIMEText 
-from email.mime.base import MIMEBase 
+import imaplib
+import os
+import pickle
+import smtplib
+import sys
+import time
+from datetime import datetime
 from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from config.config import GMAIL
+
 
 class Downloader:
     def __init__(self):
@@ -62,73 +64,72 @@ class Downloader:
         
         return newName
 
-    def sendErrorEmail(self, to):
-        try:
-            _from = ADDRESS
-            message = f'From: {_from}\nTo: {to}\nSubject: Error\n\nThe picture you sent was not an approved file type.  Please try again and make sure that the picture is one of the following file types:\n'
-            message += ', '.join(self.__SUPPORTED_FORMATS)
-            smtp = smtplib.SMTP('smtp.gmail.com', 587)
-            smtp.ehlo()
-            smtp.starttls()
-            smtp.login(ADDRESS, PASSWORD)
-            smtp.sendmail(_from, to, message)
-            smtp.close()
-            print(f'Sent incompatible filetype email to {to}.')
-            self.log(f'Sent incompatible filetype email to {to}.')
-        except Exception as exc:
-            print(f'Error sending incompatible filetype email to {to}.')
-            self.log(f'Error sending incompatible filetype email to {to}.  ' + str(exc))
+# Need to rewrite these functions to use Gmail API instead of imaplib library
 
-    def sendReport(self, exc=False):
-        try:
-            _from = ADDRESS
-            to = 'alamojad@gmail.com'
-            subject = 'Report'
-            if exc != False:
-                subject = 'Possible Fatal Error Report'
-            msg = MIMEMultipart() 
-            msg['From'] = _from 
-            msg['To'] = to
-            msg['Subject'] = subject
-            body = self.generateReport(exc)
-            msg.attach(MIMEText(body, 'plain')) 
-            filename = 'log.txt'
-            attachment = open(self.__LOG_PATH, 'rb') 
-            p = MIMEBase('application', 'octet-stream') 
-            p.set_payload((attachment).read()) 
-            encoders.encode_base64(p) 
-            p.add_header('Content-Disposition', f'attachment; filename= {filename}') 
-            msg.attach(p) 
-            s = smtplib.SMTP('smtp.gmail.com', 587) 
-            s.starttls() 
-            s.login(ADDRESS, PASSWORD) 
-            text = msg.as_string() 
-            s.sendmail(_from, to, text) 
-            s.quit() 
-            print(f'Sent report to {to}.')
-            self.log(f'Sent report to {to}.')
-        except Exception as exc:
-            print(f'Error sending report email to {to}.')
-            self.log(f'Error sending report email to {to}.  ' + str(exc))
+    # def sendErrorEmail(self, to):
+    #     try:
+    #         _from = ADDRESS
+    #         message = f'From: {_from}\nTo: {to}\nSubject: Error\n\nThe picture you sent was not an approved file type.  Please try again and make sure that the picture is one of the following file types:\n'
+    #         message += ', '.join(self.__SUPPORTED_FORMATS)
+    #         smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    #         smtp.ehlo()
+    #         smtp.starttls()
+    #         smtp.login(ADDRESS, PASSWORD)
+    #         smtp.sendmail(_from, to, message)
+    #         smtp.close()
+    #         print(f'Sent incompatible filetype email to {to}.')
+    #         self.log(f'Sent incompatible filetype email to {to}.')
+    #     except Exception as exc:
+    #         print(f'Error sending incompatible filetype email to {to}.')
+    #         self.log(f'Error sending incompatible filetype email to {to}.  ' + str(exc))
 
-    def generateReport(self, exc=False):
-        report = F'Address: {ADDRESS}\n'
-        now = datetime.now()
-        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
-        report += f'Date: {dt_string}\n'
-        stop = time.time()
-        report += 'Uptime {}\n'.format(stop - self.__START)
-        if exc != False:
-            report += f'\nError Message: {exc}'
+    # def sendReport(self, exc=False):
+    #     try:
+    #         _from = ADDRESS
+    #         to = 'alamojad@gmail.com'
+    #         subject = 'Report'
+    #         if exc != False:
+    #             subject = 'Possible Fatal Error Report'
+    #         msg = MIMEMultipart() 
+    #         msg['From'] = _from 
+    #         msg['To'] = to
+    #         msg['Subject'] = subject
+    #         body = self.generateReport(exc)
+    #         msg.attach(MIMEText(body, 'plain')) 
+    #         filename = 'log.txt'
+    #         attachment = open(self.__LOG_PATH, 'rb') 
+    #         p = MIMEBase('application', 'octet-stream') 
+    #         p.set_payload((attachment).read()) 
+    #         encoders.encode_base64(p) 
+    #         p.add_header('Content-Disposition', f'attachment; filename= {filename}') 
+    #         msg.attach(p) 
+    #         s = smtplib.SMTP('smtp.gmail.com', 587) 
+    #         s.starttls() 
+    #         s.login(ADDRESS, PASSWORD) 
+    #         text = msg.as_string() 
+    #         s.sendmail(_from, to, text) 
+    #         s.quit() 
+    #         print(f'Sent report to {to}.')
+    #         self.log(f'Sent report to {to}.')
+    #     except Exception as exc:
+    #         print(f'Error sending report email to {to}.')
+    #         self.log(f'Error sending report email to {to}.  ' + str(exc))
 
-        return report
+    # def generateReport(self, exc=False):
+    #     report = F'Address: {ADDRESS}\n'
+    #     now = datetime.now()
+    #     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+    #     report += f'Date: {dt_string}\n'
+    #     stop = time.time()
+    #     report += 'Uptime {}\n'.format(stop - self.__START)
+    #     if exc != False:
+    #         report += f'\nError Message: {exc}'
 
-    def log(self, message):
-        now = datetime.now()
-        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
-        with open(self.__LOG_PATH, 'a') as f:
-            message = dt_string + ': ' + message + '\n'
-            f.writelines(message)
+    #     return report
 
-d = Downloader()
-d.refresh_photos()
+    # def log(self, message):
+    #     now = datetime.now()
+    #     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+    #     with open(self.__LOG_PATH, 'a') as f:
+    #         message = dt_string + ': ' + message + '\n'
+    #         f.writelines(message)
