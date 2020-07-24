@@ -183,7 +183,7 @@ class Settings(Resource):
         response = {
             'response': settings
         }
-        
+
         return response, 200
 
     def put(self):
@@ -204,7 +204,7 @@ class Settings(Resource):
         return "Updated settings.", 200
 
 
-api.add_resource(Photos, '/photos/', '/photos/<string:filename>')
+api.add_resource(Photos, '/photos/')
 api.add_resource(DownloadPhotos, '/download_photos/')
 api.add_resource(DisplayPhoto, '/display_photo/')
 api.add_resource(Modes, '/modes/')
