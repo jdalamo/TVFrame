@@ -52,6 +52,7 @@ class Photos(Resource):
         if filename not in pics:
             return "Invalid file name", 400
         os.remove(os.path.join('pics', filename))
+
         return "Picture deleted.", 200
 
 class DisplayPhoto(Resource):
@@ -90,6 +91,7 @@ class Modes(Resource):
         response = {
             'response': modes
         }
+
         return response, 200
 
 class DeviceName(Resource):
@@ -104,6 +106,7 @@ class DeviceName(Resource):
                 'device_name': settings['device_name']
             }
         }
+
         return response, 200
 
     def put(self):
@@ -180,6 +183,7 @@ class Settings(Resource):
         response = {
             'response': settings
         }
+        
         return response, 200
 
     def put(self):
