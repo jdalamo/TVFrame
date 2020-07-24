@@ -1,0 +1,9 @@
+RESTful API Features:
+
+- View list of pictures saved on device ✅
+- Restart device
+- Rename pictures on device
+- Delete pictures from device ✅
+- Switch view mode between slideshow and single picture ✅
+- Rename device ✅
+- View error log ✅
