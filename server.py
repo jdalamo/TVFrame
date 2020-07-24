@@ -1,9 +1,9 @@
-from flask import Flask, request, send_file
-from flask_restful import Resource, Api
+import json
 import os
 import socket
-import json
+from flask import Flask, request, send_file
 from downloader import Downloader
+from flask_restful import Api, Resource
 
 app = Flask(__name__)
 api = Api(app)
