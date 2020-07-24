@@ -13,8 +13,11 @@ class Pic(Resource):
         if filename == None:
             return "No picture specified.", 400
         path = os.path.join('pics', filename)
-        response = app.make_response(send_file(path, mimetype='image/jpg'))
-        # response.cache_control.max_age = 1
+        _, ext = os.path.splitext
+        if ext[0] == '.':
+            ext = ext.lstrip('.')
+        response = app.make_response(send_file(path, mimetype=f'image/{ext}'))
+        # set no cache so that SDWebImage doesn't cache preview pictures
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         response.headers['Pragma'] = 'no-cache'
 
