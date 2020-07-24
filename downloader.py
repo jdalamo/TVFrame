@@ -16,6 +16,8 @@ from config.config import GMAIL
 class Downloader:
     def __init__(self):
         self.__WD = os.getcwd()
+        if not os.path.exists('pics'):
+            os.mkdir('pics')
         self.__PICS_PATH = os.path.join(self.__WD, 'pics')
         self.__LOG_PATH = os.path.join(self.__WD, 'log.txt')
         self.__SUPPORTED_FORMATS = ['.jpg', '.jpeg', '.png', '.gif', '.ppm', '.pnm', '.pgm', '.xpm', '.tif', '.tiff', '.eim']
