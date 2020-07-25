@@ -9,8 +9,11 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
 creds = None
 
-if os.path.exists('token.pickle'):
-    with open('token.pickle', 'rb') as token:
+TOKEN_PATH = os.path.join('config', 'token.pickle')
+CREDS_PATH = os.path.join('config', 'credentials.json')
+
+if os.path.exists(TOKEN_PATH):
+    with open(TOKEN_PATH, 'rb') as token:
         creds = pickle.load(token)
 # If there are no (valid) credentials available, let the user log in.
 if not creds or not creds.valid:
@@ -18,10 +21,10 @@ if not creds or not creds.valid:
         creds.refresh(Request())
     else:
         flow = InstalledAppFlow.from_client_secrets_file(
-            'credentials.json', SCOPES)
+            CREDS_PATH, SCOPES)
         creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
-    with open('token.pickle', 'wb') as token:
+    with open(TOKEN_PATH, 'wb') as token:
         pickle.dump(creds, token)
 
 GMAIL = build('gmail', 'v1', credentials=creds)

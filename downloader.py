@@ -3,6 +3,7 @@ import email
 import imaplib
 import os
 import pickle
+import re
 import smtplib
 import sys
 import time
@@ -26,33 +27,45 @@ class Downloader:
         self.__START = time.time()
         self.downloading = False # use later when implementing restart button in app
 
-    def refresh_photos(self):
-        results = GMAIL.users().messages().list(userId='me', labelIds=['INBOX', 'UNREAD']).execute()
-        messages = results.get('messages', [])
-        for message in messages:
-            msg_id = message['id']
-            GMAIL.users().messages().modify(userId='me', id=msg_id, body={'removeLabelIds': ['UNREAD']}).execute()
-            msg = GMAIL.users().messages().get(userId='me', id=msg_id).execute()
+    def start(self):
+        while True:
+            results = GMAIL.users().messages().list(userId='me', labelIds=['INBOX', 'UNREAD']).execute()
+            messages = results.get('messages', [])
+            for message in messages:
+                msg_id = message['id']
+                GMAIL.users().messages().modify(userId='me', id=msg_id, body={'removeLabelIds': ['UNREAD']}).execute()
+                msg = GMAIL.users().messages().get(userId='me', id=msg_id).execute()
 
-            for part in msg['payload']['parts']:
-                if part['filename']:
-                    if 'data' in part['body']:
-                        data = part['body']
-                    else:
-                        att_id = part['body']['attachmentId']
-                        att = GMAIL.users().messages().attachments().get(userId='me', messageId=msg_id,id=att_id).execute()
-                        data = att['data']
-                    file_data = base64.urlsafe_b64decode(data.encode('UTF-8'))
-                    filename = self.getFileName(part['filename'])
-                    path = os.path.join(self.__PICS_PATH, filename)
+                for part in msg['payload']['parts']:
+                    if part['filename']:
+                        if 'data' in part['body']:
+                            data = part['body']
+                        else:
+                            att_id = part['body']['attachmentId']
+                            att = GMAIL.users().messages().attachments().get(userId='me', messageId=msg_id,id=att_id).execute()
+                            data = att['data']
+                        file_data = base64.urlsafe_b64decode(data.encode('UTF-8'))
+                        filename = self.__getFileName(part['filename'])
+                        _, ext = os.path.splitext(filename)
+                        if ext not in self.__SUPPORTED_FORMATS:
+                            try:
+                                sender = self.__extractSenderEmail(msg['payload']['headers'])
+                                self.__sendErrorEmail(sender)
+                            except (TypeError, AttributeError) as exc:
+                                self.__log(str(exc))
+                            break
 
-                    with open(path, 'wb') as f:
-                        f.write(file_data)
+                        path = os.path.join(self.__PICS_PATH, filename)
+                        with open(path, 'wb') as f:
+                            f.write(file_data)
 
-    def getFileName(self, currentName):
+            # time.sleep(3)
+
+    def __getFileName(self, currentName):
         fileName, fileExt = os.path.splitext(currentName)
         newName = fileName + fileExt.lower()
         contents = set([p for p in os.listdir(self.__PICS_PATH) if os.path.isfile(os.path.join(self.__PICS_PATH, p)) and p != '.DS_Store'])
+
         if newName not in contents:
             return newName
 
@@ -64,72 +77,53 @@ class Downloader:
         
         return newName
 
+    def __extractSenderEmail(self, headers):
+        value = None
+        for header in headers:
+            try:
+                if header['name'] == 'From':
+                    value = header['value']
+            except TypeError:
+                continue
+
+        try:
+            match = re.search(R'(?<=\<)(.*?)(?=\>)', value)
+            result = match.group()
+        except TypeError:
+            raise TypeError("Error extracting email--'From' header not in headers")
+        except AttributeError:
+            raise AttributeError("Error extracting email--No regular expression match.")
+        
+        return result
+
+
+
 # Need to rewrite these functions to use Gmail API instead of imaplib library
 
-    # def sendErrorEmail(self, to):
-    #     try:
-    #         _from = ADDRESS
-    #         message = f'From: {_from}\nTo: {to}\nSubject: Error\n\nThe picture you sent was not an approved file type.  Please try again and make sure that the picture is one of the following file types:\n'
-    #         message += ', '.join(self.__SUPPORTED_FORMATS)
-    #         smtp = smtplib.SMTP('smtp.gmail.com', 587)
-    #         smtp.ehlo()
-    #         smtp.starttls()
-    #         smtp.login(ADDRESS, PASSWORD)
-    #         smtp.sendmail(_from, to, message)
-    #         smtp.close()
-    #         print(f'Sent incompatible filetype email to {to}.')
-    #         self.log(f'Sent incompatible filetype email to {to}.')
-    #     except Exception as exc:
-    #         print(f'Error sending incompatible filetype email to {to}.')
-    #         self.log(f'Error sending incompatible filetype email to {to}.  ' + str(exc))
+    def __sendErrorEmail(self, to):
+        try:
+            _from = 'tvframe.test@gmail.com'
+            message_text = f'From: {_from}\nTo: {to}\nSubject: Error\n\nThe picture you sent was not an approved file type.  Please try again and make sure that the picture is one of the following file types:\n'
+            message_text += ', '.join(self.__SUPPORTED_FORMATS)
+            message = MIMEText(message_text)
+            message['to'] = to
+            message['from'] = _from
+            message['subject'] = 'Incompatible filetype sent to TVFrame'
+            body = {'raw': base64.urlsafe_b64encode(message.as_string())}
+            GMAIL.users().messages().send(userId='me', body=body).execute()
+            print(f'Sent incompatible filetype email to {to}.')
+            self.__log(f'Sent incompatible filetype email to {to}.')
+        except Exception as exc:
+            print(f'Error sending incompatible filetype email to {to}.')
+            self.__log(f'Error sending incompatible filetype email to {to}.  ' + str(exc))
 
-    # def sendReport(self, exc=False):
-    #     try:
-    #         _from = ADDRESS
-    #         to = 'alamojad@gmail.com'
-    #         subject = 'Report'
-    #         if exc != False:
-    #             subject = 'Possible Fatal Error Report'
-    #         msg = MIMEMultipart() 
-    #         msg['From'] = _from 
-    #         msg['To'] = to
-    #         msg['Subject'] = subject
-    #         body = self.generateReport(exc)
-    #         msg.attach(MIMEText(body, 'plain')) 
-    #         filename = 'log.txt'
-    #         attachment = open(self.__LOG_PATH, 'rb') 
-    #         p = MIMEBase('application', 'octet-stream') 
-    #         p.set_payload((attachment).read()) 
-    #         encoders.encode_base64(p) 
-    #         p.add_header('Content-Disposition', f'attachment; filename= {filename}') 
-    #         msg.attach(p) 
-    #         s = smtplib.SMTP('smtp.gmail.com', 587) 
-    #         s.starttls() 
-    #         s.login(ADDRESS, PASSWORD) 
-    #         text = msg.as_string() 
-    #         s.sendmail(_from, to, text) 
-    #         s.quit() 
-    #         print(f'Sent report to {to}.')
-    #         self.log(f'Sent report to {to}.')
-    #     except Exception as exc:
-    #         print(f'Error sending report email to {to}.')
-    #         self.log(f'Error sending report email to {to}.  ' + str(exc))
+    def __log(self, message):
+        now = datetime.now()
+        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+        with open(self.__LOG_PATH, 'a') as f:
+            message = dt_string + ': ' + message + '\n'
+            f.writelines(message)
 
-    # def generateReport(self, exc=False):
-    #     report = F'Address: {ADDRESS}\n'
-    #     now = datetime.now()
-    #     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
-    #     report += f'Date: {dt_string}\n'
-    #     stop = time.time()
-    #     report += 'Uptime {}\n'.format(stop - self.__START)
-    #     if exc != False:
-    #         report += f'\nError Message: {exc}'
 
-    #     return report
-
-    # def log(self, message):
-    #     now = datetime.now()
-    #     dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
-    #     with open(self.__LOG_PATH, 'a') as f:
-    #         message = dt_string + ': ' + message + '\n'
-    #         f.writelines(message)
+d = Downloader()
+d.start()

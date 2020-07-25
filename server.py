@@ -13,7 +13,7 @@ class Pic(Resource):
         if filename == None:
             return "No picture specified.", 400
         path = os.path.join('pics', filename)
-        _, ext = os.path.splitext
+        _, ext = os.path.splitext(path)
         if ext[0] == '.':
             ext = ext.lstrip('.')
         response = app.make_response(send_file(path, mimetype=f'image/{ext}'))
