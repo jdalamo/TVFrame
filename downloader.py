@@ -58,6 +58,8 @@ class Downloader:
                         path = os.path.join(self.__PICS_PATH, filename)
                         with open(path, 'wb') as f:
                             f.write(file_data)
+                        
+                        self.__log(f'Downloaded {filename} from {sender}.')
 
             # time.sleep(3)
 
@@ -96,20 +98,17 @@ class Downloader:
         
         return result
 
-
-
-# Need to rewrite these functions to use Gmail API instead of imaplib library
-
     def __sendErrorEmail(self, to):
         try:
-            _from = 'tvframe.test@gmail.com'
-            message_text = f'From: {_from}\nTo: {to}\nSubject: Error\n\nThe picture you sent was not an approved file type.  Please try again and make sure that the picture is one of the following file types:\n'
+            message_text = 'The picture file you sent was not an approved file type.  Please try again and make sure that the picture is one of the following file types: ('
             message_text += ', '.join(self.__SUPPORTED_FORMATS)
-            message = MIMEText(message_text)
+            message_text += ')'
+            message = MIMEMultipart()
             message['to'] = to
-            message['from'] = _from
-            message['subject'] = 'Incompatible filetype sent to TVFrame'
-            body = {'raw': base64.urlsafe_b64encode(message.as_string())}
+            message['subject'] = 'TVFrame: Incompatible filetype'
+            message.attach(MIMEText(message_text, 'plain'))
+            raw_string = base64.urlsafe_b64encode(message.as_bytes()).decode()
+            body = {'raw': raw_string}
             GMAIL.users().messages().send(userId='me', body=body).execute()
             print(f'Sent incompatible filetype email to {to}.')
             self.__log(f'Sent incompatible filetype email to {to}.')
