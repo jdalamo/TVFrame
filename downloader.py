@@ -26,7 +26,7 @@ class Downloader:
         self.__SUPPORTED_FORMATS = ['.jpg', '.jpeg', '.png', '.gif', '.ppm', '.pnm', '.pgm', '.xpm', '.tif', '.tiff', '.eim']
         self.__START = time.time()
         self.downloading = False # use later when implementing restart button in app
-
+     
     def start(self):
         while True:
             results = GMAIL.users().messages().list(userId='me', labelIds=['INBOX', 'UNREAD']).execute()
@@ -94,7 +94,7 @@ class Downloader:
         except TypeError:
             raise TypeError("Error extracting email--'From' header not in headers")
         except AttributeError:
-            raise AttributeError("Error extracting email--No regular expression match.")
+            raise AttributeError('Error extracting email--No regular expression match.')
         
         return result
 
@@ -118,7 +118,7 @@ class Downloader:
 
     def __log(self, message):
         now = datetime.now()
-        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+        dt_string = now.strftime('%m/%d/%Y %H:%M:%S')
         with open(self.__LOG_PATH, 'a') as f:
             message = dt_string + ': ' + message + '\n'
             f.writelines(message)
