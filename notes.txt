@@ -7,3 +7,5 @@ RESTful API Features:
 - Switch view mode between slideshow and single picture ✅
 - Rename device ✅
 - View error log ✅
+- Create and organize pictures into playlists
+- Schedule playlists to play automatically at certain times
