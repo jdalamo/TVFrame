@@ -3,3 +3,4 @@ test.py
 credentials.json
 token.pickle
 log.txt
+__pycache__
