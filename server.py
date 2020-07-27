@@ -67,7 +67,7 @@ class Settings(Resource):
                 _settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
-            
+
         settings = {}
         settings['device_name'] = _settings['device_name']
         settings['mode'] = _settings['mode']
@@ -85,6 +85,7 @@ class Settings(Resource):
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
         data = request.json['data']
+        #TODO: Refactor this
         settings['device_name'] = data['newName']
         try:
             with open(SETTINGS_PATH, 'w') as f:
@@ -166,6 +167,26 @@ class DisplayPhoto(Resource):
             return 'Something went wrong encoding JSON, try again.', 409
         
         return 'Successfully set display picture.', 200
+
+
+class ConnectionStatus(Resource):
+    def put(self):
+        try:
+            with open(SETTINGS_PATH, 'r') as f:
+                settings = json.load(f)
+        except json.decoder.JSONDecodeError:
+            return 'Something went wrong deconding JSON, try again.', 409
+
+        status = request.json['data']
+        settings['app_is_connected'] = status
+        try:
+            with open(SETTINGS_PATH, 'w') as f:
+                json.dump(settings, f)
+        except json.decoder.JSONDecodeError:
+            return 'Something went wrong encoding JSON, try again.', 409
+
+        return 'Successfully updated connection status.', 200
+        
 
         
 class Log(Resource):
