@@ -1,1 +1,15 @@
-{"device_name": "JD's TVFrame", "mode": "Slideshow", "display_photo": "1.jpg", "modes": [{"name": "Slideshow", "active": true}, {"name": "Single Photo", "active": false}]}
+{
+    "device_name": "JD's TVFrame",
+    "mode": "Slideshow",
+    "display_photo": "1.jpg",
+    "modes": [
+        {
+            "name": "Slideshow",
+            "active": true
+        },
+        {
+            "name": "Single Photo",
+            "active": false
+        }
+    ]
+}

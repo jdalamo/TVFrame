@@ -64,11 +64,14 @@ class Settings(Resource):
     def get(self):
         try:
             with open(SETTINGS_PATH, 'r') as f:
-                settings = json.load(f)
+                _settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
-        settings.pop('modes')
-        settings.pop('display_photo')
+            
+        settings = {}
+        settings['device_name'] = _settings['device_name']
+        settings['mode'] = _settings['mode']
+
         response = {
             'response': settings
         }
@@ -188,4 +191,4 @@ api.add_resource(Log, '/log/')
 if __name__ == '__main__':
     hostname = socket.gethostname()
     ipaddr = socket.gethostbyname(hostname)
-    app.run('127.0.0.1', debug=True)
+    app.run('172.20.10.2', debug=True)
