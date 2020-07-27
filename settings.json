@@ -11,5 +11,6 @@
             "name": "Single Photo",
             "active": false
         }
-    ]
+    ],
+    "app_is_connected": false
 }
