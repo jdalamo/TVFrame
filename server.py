@@ -5,6 +5,8 @@ import socket
 from flask import Flask, request, send_file
 from flask_restful import Api, Resource
 
+from config.config import GMAIL
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -130,6 +132,21 @@ class Modes(Resource):
             return 'Invalid mode name.', 400
 
 
+class Email(Resource):
+    def get(self):
+        try:
+            GMAIL_response = GMAIL.users().getProfile(userId='me').execute()
+            address = GMAIL_response['emailAddress']
+        except:
+            return 'Something went wrong retrieving email address', 409
+        
+        response = {
+            'response': address
+        }
+
+        return response, 200
+
+
 class DisplayPhoto(Resource):
     def put(self):
         try:
@@ -163,6 +180,7 @@ class Log(Resource):
 api.add_resource(Photos, '/photos/', '/photos/<string:filename>')
 api.add_resource(Settings, '/settings/')
 api.add_resource(Modes, '/modes/')
+api.add_resource(Email, '/email/')
 api.add_resource(DisplayPhoto, '/display_photo/')
 api.add_resource(Log, '/log/')
 
