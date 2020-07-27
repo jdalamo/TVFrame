@@ -9,6 +9,8 @@ app = Flask(__name__)
 api = Api(app)
 
 PICS_PATH = os.path.abspath('pics')
+SETTINGS_PATH = os.path.abspath('settings.json')
+LOG_PATH = os.path.abspath('log.txt')
 
 class Photos(Resource):
     def get(self, filename=None):
@@ -59,7 +61,7 @@ class Photos(Resource):
 class Settings(Resource):
     def get(self):
         try:
-            with open('settings.json', 'r') as f:
+            with open(SETTINGS_PATH, 'r') as f:
                 settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
@@ -73,14 +75,14 @@ class Settings(Resource):
 
     def put(self):
         try:
-            with open('settings.json', 'r') as f:
+            with open(SETTINGS_PATH, 'r') as f:
                 settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
         data = request.json['data']
         settings['device_name'] = data['newName']
         try:
-            with open('settings.json', 'w') as f:
+            with open(SETTINGS_PATH, 'w') as f:
                 json.dump(settings, f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
@@ -91,7 +93,7 @@ class Settings(Resource):
 class Modes(Resource):
     def get(self):
         try:
-            with open('settings.json', 'r') as f:
+            with open(SETTINGS_PATH, 'r') as f:
                 settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
@@ -104,7 +106,7 @@ class Modes(Resource):
     
     def put(self):
         try:
-            with open('settings.json', 'r') as f:
+            with open(SETTINGS_PATH, 'r') as f:
                 settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong decoding JSON, try again.', 409
@@ -119,7 +121,7 @@ class Modes(Resource):
                 else:
                     entry['active'] = False
             try:
-                with open('settings.json', 'w') as f:
+                with open(SETTINGS_PATH, 'w') as f:
                     json.dump(settings, f)
             except json.decoder.JSONDecodeError:
                 return 'Something went wrong decoding JSON, try again.', 409
@@ -131,14 +133,14 @@ class Modes(Resource):
 class DisplayPhoto(Resource):
     def put(self):
         try:
-            with open('settings.json', 'r') as f:
+            with open(SETTINGS_PATH, 'r') as f:
                 settings = json.load(f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong deconding JSON, try again.', 409
         newPhoto = request.json['data']
         settings['display_photo'] = newPhoto
         try:
-            with open('settings.json', 'w') as f:
+            with open(SETTINGS_PATH, 'w') as f:
                 json.dump(settings, f)
         except json.decoder.JSONDecodeError:
             return 'Something went wrong encoding JSON, try again.', 409
@@ -148,8 +150,8 @@ class DisplayPhoto(Resource):
         
 class Log(Resource):
     def get(self):
-        if os.path.exists('log.txt'):
-            f = open('log.txt', 'r')
+        if os.path.exists(LOG_PATH):
+            f = open(LOG_PATH, 'r')
             response = {
                 'response': f.read()
             }
