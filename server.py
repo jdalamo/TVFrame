@@ -1,9 +1,7 @@
 import json
 import os
 import socket
-from threading import Thread
 from flask import Flask, request, send_file
-from downloader import Downloader
 from flask_restful import Api, Resource
 
 app = Flask(__name__)
