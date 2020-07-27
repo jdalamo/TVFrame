@@ -1,4 +1,5 @@
 import multiprocessing
+
 from feh_manager import Feh_Manager
 from downloader import Downloader
 
