@@ -164,7 +164,7 @@ class DisplayPhoto(Resource):
             with open(SETTINGS_PATH, 'w') as f:
                 json.dump(settings, f)
         except json.decoder.JSONDecodeError:
-            return 'Something went wrong encoding JSON, try again.', 409
+            return 'Something went wrong decoding JSON, try again.', 409
         
         return 'Successfully set display picture.', 200
 
@@ -183,7 +183,7 @@ class ConnectionStatus(Resource):
             with open(SETTINGS_PATH, 'w') as f:
                 json.dump(settings, f)
         except json.decoder.JSONDecodeError:
-            return 'Something went wrong encoding JSON, try again.', 409
+            return 'Something went wrong decoding JSON, try again.', 409
 
         return 'Successfully updated connection status.', 200
         
