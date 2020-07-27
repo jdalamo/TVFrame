@@ -8,11 +8,13 @@ from flask_restful import Api, Resource
 app = Flask(__name__)
 api = Api(app)
 
+PICS_PATH = os.path.abspath('pics')
+
 class Pic(Resource):
     def get(self, filename=None):
         if filename == None:
             return 'No picture specified.', 400
-        path = os.path.join('pics', filename)
+        path = os.path.join(PICS_PATH, filename)
         _, ext = os.path.splitext(path)
         if ext[0] == '.':
             ext = ext.lstrip('.')
@@ -26,8 +28,8 @@ class Pic(Resource):
 
 class Photos(Resource):
     def get(self):
-        if os.path.exists('pics/'):
-            pics = [p for p in os.listdir('pics') if os.path.isfile(os.path.join('pics', p)) and p != '.DS_Store']
+        if os.path.exists(PICS_PATH):
+            pics = [p for p in os.listdir(PICS_PATH) if os.path.isfile(os.path.join(PICS_PATH, p)) and p != '.DS_Store']
             response = {
                 'response': pics
             }
@@ -36,12 +38,12 @@ class Photos(Resource):
             return 'No pictures.', 400
     
     def put(self):
-        pics = [p for p in os.listdir('pics') if os.path.isfile(os.path.join('pics', p)) and p != '.DS_Store']
+        pics = [p for p in os.listdir(PICS_PATH) if os.path.isfile(os.path.join(PICS_PATH, p)) and p != '.DS_Store']
         jsonData = request.json['data']
         oldName = jsonData['old_name']
         newName = jsonData['new_name']
         if oldName in pics:
-            os.rename(os.path.join('pics', oldName), os.path.join('pics', newName))
+            os.rename(os.path.join(PICS_PATH, oldName), os.path.join(PICS_PATH, newName))
             return 'Renamed photo.', 200
         else:
             return 'Specified filename not in directory.', 400
@@ -49,10 +51,10 @@ class Photos(Resource):
     def delete(self, filename=None):
         if filename == None:
             return 'No file name specified.', 400
-        pics = [p for p in os.listdir('pics') if os.path.isfile(os.path.join('pics', p)) and p != '.DS_Store']
+        pics = [p for p in os.listdir(PICS_PATH) if os.path.isfile(os.path.join(PICS_PATH, p)) and p != '.DS_Store']
         if filename not in pics:
             return 'Invalid file name', 400
-        os.remove(os.path.join('pics', filename))
+        os.remove(os.path.join(PICS_PATH, filename))
 
         return 'Picture deleted.', 200
 
@@ -169,15 +171,15 @@ class Log(Resource):
         else:
             return 'No log created.', 400
 
-
-class DeletePic(Resource):
-    def put(self):
-        picToDelete = request.form['data']
-        if picToDelete in [p for p in os.listdir('pics') if os.path.isfile(os.path.join('pics', p)) and p != '.DS_Store']:
-            os.remove(os.path.join('pics', picToDelete))
-            return 'Deleted picture.', 200
-        else:
-            return f'Could not find selected picture ({picToDelete}) to delete.', 400
+# TODO: Delete
+# class DeletePic(Resource):
+#     def put(self):
+#         picToDelete = request.form['data']
+#         if picToDelete in [p for p in os.listdir('pics') if os.path.isfile(os.path.join('pics', p)) and p != '.DS_Store']:
+#             os.remove(os.path.join('pics', picToDelete))
+#             return 'Deleted picture.', 200
+#         else:
+#             return f'Could not find selected picture ({picToDelete}) to delete.', 400
 
 
 class Settings(Resource):
@@ -221,7 +223,7 @@ api.add_resource(Modes, '/modes/')
 api.add_resource(ChangeMode, '/changemode/')
 api.add_resource(DeviceName, '/name/')
 api.add_resource(Log, '/log/')
-api.add_resource(DeletePic, '/delete/')
+# api.add_resource(DeletePic, '/delete/')
 api.add_resource(Settings, '/settings/')
 
 if __name__ == '__main__':
