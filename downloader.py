@@ -12,6 +12,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from threading import Thread
 
 from config.config import GMAIL
 
@@ -26,7 +27,7 @@ class Downloader:
         self.__START = time.time()
         self.downloading = False # use later when implementing restart button in app
      
-    def start(self):
+    def run(self):
         while True:
             results = GMAIL.users().messages().list(userId='me', labelIds=['INBOX', 'UNREAD']).execute()
             messages = results.get('messages', [])
@@ -123,5 +124,5 @@ class Downloader:
             f.writelines(message)
 
 
-# d = Downloader()
-# d.start()
+d = Downloader()
+d.run()

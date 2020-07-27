@@ -80,7 +80,6 @@ class Settings(Resource):
             return 'Something went wrong decoding JSON, try again.', 409
         data = request.json['data']
         settings['device_name'] = data['newName']
-        settings['email'] = data['newEmail']
         try:
             with open('settings.json', 'w') as f:
                 json.dump(settings, f)
@@ -173,6 +172,8 @@ api.add_resource(Log, '/log/')
 if __name__ == '__main__':
     # download_thread = Thread(target=download_manager)
     # download_thread.start()
+    d = Downloader()
+    d.start()
     hostname = socket.gethostname()
     ipaddr = socket.gethostbyname(hostname)
     app.run('127.0.0.1', debug=True)
