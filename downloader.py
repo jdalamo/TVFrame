@@ -46,12 +46,12 @@ class Downloader:
                         file_data = base64.urlsafe_b64decode(data.encode('UTF-8'))
                         filename = self.__getFileName(part['filename'])
                         _, ext = os.path.splitext(filename)
+                        try:
+                            sender = self.__extractSenderEmail(msg['payload']['headers'])
+                        except (TypeError, AttributeError) as exc:
+                            self.__log(str(exc))
                         if ext not in self.__SUPPORTED_FORMATS:
-                            try:
-                                sender = self.__extractSenderEmail(msg['payload']['headers'])
-                                self.__sendErrorEmail(sender)
-                            except (TypeError, AttributeError) as exc:
-                                self.__log(str(exc))
+                            self.__sendErrorEmail(sender)
                             break
 
                         path = os.path.join(self.__PICS_PATH, filename)
@@ -123,5 +123,5 @@ class Downloader:
             f.writelines(message)
 
 
-d = Downloader()
-d.start()
+# d = Downloader()
+# d.start()

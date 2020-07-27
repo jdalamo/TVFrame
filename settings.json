@@ -1,16 +1,1 @@
-{
-    "device_name": "TVFrame",
-    "email": "pc18pics@gmail.com",
-    "mode": "Slideshow",
-    "display_photo": "1.jpg",
-    "modes": [
-        {
-            "name": "Slideshow",
-            "active": true
-        },
-        {
-            "name": "Single Photo",
-            "active": false
-        }
-    ]
-}
+{"device_name": "JD\u2019s TVFrame", "email": "pc18pics@gmail.com", "mode": "Slideshow", "display_photo": "1.jpg", "modes": [{"name": "Slideshow", "active": true}, {"name": "Single Photo", "active": false}]}
