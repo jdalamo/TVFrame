@@ -1,18 +1,9 @@
 import base64
-import email
-import imaplib
 import os
-import pickle
 import re
-import smtplib
-import sys
-import time
 from datetime import datetime
-from email import encoders
-from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from threading import Thread
 
 from config.config import GMAIL
 
@@ -24,7 +15,6 @@ class Downloader:
         self.__PICS_PATH = os.path.abspath('pics')
         self.__LOG_PATH = os.path.abspath('log.txt')
         self.__SUPPORTED_FORMATS = ['.jpg', '.jpeg', '.png', '.gif', '.ppm', '.pnm', '.pgm', '.xpm', '.tif', '.tiff', '.eim']
-        self.__START = time.time()
         self.downloading = False # use later when implementing restart button in app
      
     def run(self):
