@@ -165,15 +165,8 @@ api.add_resource(Modes, '/modes/')
 api.add_resource(DisplayPhoto, '/display_photo/')
 api.add_resource(Log, '/log/')
 
-# def download_manager():
-#     d = Downloader()
-#     d.start()
 
 if __name__ == '__main__':
-    # download_thread = Thread(target=download_manager)
-    # download_thread.start()
-    d = Downloader()
-    d.start()
     hostname = socket.gethostname()
     ipaddr = socket.gethostbyname(hostname)
     app.run('127.0.0.1', debug=True)

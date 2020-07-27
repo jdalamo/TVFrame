@@ -1,10 +1,18 @@
-import concurrent.futures
+import multiprocessing
 from feh_manager import Feh_Manager
 from downloader import Downloader
 
-d = Downloader()
-fm = Feh_Manager()
+def main():
 
-with concurrent.futures.ProcessPoolExecutor() as executor:
-    f1 = executor.submit(d.run())
-    f2 = executor.submit(fm.run())
+    d = Downloader()
+    fm = Feh_Manager()
+
+    p1 = multiprocessing.Process(target=d.run())
+    p2 = multiprocessing.Process(target=fm.run())
+    p1.daemon = True
+    p2.daemon = True
+    p1.start()
+    p2.start()
+
+if __name__ == '__main__':
+    main()

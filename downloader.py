@@ -122,7 +122,3 @@ class Downloader:
         with open(self.__LOG_PATH, 'a') as f:
             message = dt_string + ': ' + message + '\n'
             f.writelines(message)
-
-
-d = Downloader()
-d.run()
