@@ -209,7 +209,10 @@ api.add_resource(ConnectionStatus, '/connection_status/')
 api.add_resource(Log, '/log/')
 
 
+def getIP():
+    return [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1][0]
+
 if __name__ == '__main__':
-    hostname = socket.gethostname()
-    ipaddr = socket.gethostbyname(hostname)
-    app.run('172.20.10.2', debug=True)
+    ip = getIP()
+    print(ip)
+    app.run(ip, debug=True)
