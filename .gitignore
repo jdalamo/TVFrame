@@ -6,3 +6,4 @@ log.txt
 __pycache__
 .vscode
 qr.png
+test_class.py
