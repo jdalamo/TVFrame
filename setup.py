@@ -7,7 +7,7 @@ import time
 from threading import Thread
 
 SETTINGS_PATH = os.path.abspath('settings.json')
-MANAGER_PATH = os.path.abspath('manager.py')
+START_PATH = os.path.abspath('start.py')
 QR_PATH = os.path.abspath('qr.png')
 
 def main():
@@ -34,7 +34,7 @@ def main():
         
         os.system('killall feh')
 
-    os.system(f'python3 {MANAGER_PATH}')
+    os.system(f'python3 {START_PATH}')
 
 
 def getIP():
