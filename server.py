@@ -187,7 +187,6 @@ class ConnectionStatus(Resource):
 
         return 'Successfully updated connection status.', 200
         
-
         
 class Log(Resource):
     def get(self):
@@ -206,6 +205,7 @@ api.add_resource(Settings, '/settings/')
 api.add_resource(Modes, '/modes/')
 api.add_resource(Email, '/email/')
 api.add_resource(DisplayPhoto, '/display_photo/')
+api.add_resource(ConnectionStatus, '/connection_status/')
 api.add_resource(Log, '/log/')
 
 
