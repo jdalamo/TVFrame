@@ -10,6 +10,7 @@ class Feh_Manager:
         self.__PICS_PATH = os.path.abspath('pics')
     
     def run(self):
+        print('running')
         with open(self.__SETTINGS_PATH, 'r') as f:
             settings = json.load(f)
 
@@ -42,6 +43,7 @@ class Feh_Manager:
             time.sleep(1)
 
     def __restart_feh(self, mode, photo):
+        print(self.__PICS_PATH)
         if mode == 'Slideshow':
             os.system('killall feh')
             os.system(f'feh -Z -z -F -R 10 -D 3 --hide-pointer --auto-rotate {self.__PICS_PATH}')
