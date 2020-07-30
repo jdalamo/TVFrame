@@ -38,7 +38,10 @@ def main():
 
 
 def getIP():
-    return [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1][0]
+    hostname = socket.gethostname()
+    ip = socket.gethostbyname(hostname)
+    
+    return ip
 
 def feh():
     os.system(f'feh {QR_PATH} -F')

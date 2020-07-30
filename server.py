@@ -210,7 +210,10 @@ api.add_resource(Log, '/log/')
 
 
 def getIP():
-    return [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1][0]
+    hostname = socket.gethostname()
+    ip = socket.gethostbyname(hostname)
+    
+    return ip
 
 if __name__ == '__main__':
     ip = getIP()
