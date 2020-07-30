@@ -37,11 +37,13 @@ def main():
     os.system(f'python3 {START_PATH}')
 
 
-def getIP():
-    hostname = socket.gethostname()
-    ip = socket.gethostbyname(hostname)
-    
-    return ip
+def getIP(remote_server="google.com"):
+    """
+    Return the/a network-facing IP number for this system.
+    """
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s: 
+        s.connect((remote_server, 80))
+        return s.getsockname()[0]
 
 def feh():
     os.system(f'feh {QR_PATH} -F')
