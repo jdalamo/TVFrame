@@ -52,7 +52,7 @@ class Downloader:
                         
                         self.__log(f'Downloaded {filename} from {sender}.')
 
-            # time.sleep(5)
+            time.sleep(5)
 
     def __getFileName(self, currentName):
         fileName, fileExt = os.path.splitext(currentName)
