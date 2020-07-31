@@ -30,17 +30,21 @@ Note: May need to use pip and python instead of pip3 and python3 if you don't ha
 > pip3 install -r requirements.txt
 > python3 server.py
 ```
-In a separate terminal window:
-```
-> python3 setup.py
-```
+
 7. In the browser window that opened, select the account you want to use
 8. Click "Advanced"
 9. Click "Go to {App Name}
 10. Click "Allow" twice
+11. Run the following command in a separate terminal window:
+
+```
+> python3 setup.py
+```
+
+12. Clone the [Companion iOS app](https://github.com/jdalamo/TVFrame_App) and build it to your phone with Xcode
+13. Open the app and scan the QR code on your display
 11. The program should now be running on your screen
 12. To add pictures to your device email them to the Gmail account you set it up with
-13. Download the [Companion iOS app](https://github.com/jdalamo/TVFrame_App) and build it to your phone to control the display
 
 ## Planned Future Functionality
 ---

@@ -68,7 +68,7 @@ class Feh_Manager:
 
     def __show_default(self):
         os.system('killall feh')
-        os.system(f'feh {self.__DEFAULT_IMAGE_PATH} -F')
+        os.system(f'feh {self.__DEFAULT_IMAGE_PATH} -F --hide-pointer --auto-rotate')
 
     def __restart_feh(self, mode, photo):
         print(self.__PICS_PATH)
@@ -81,4 +81,4 @@ class Feh_Manager:
             photo = settings['display_photo']
             os.system('killall feh')
             path = os.path.join(self.__PICS_PATH, photo)
-            os.system(f'feh {path} -F')
+            os.system(f'feh {path} -F --hide-pointer --auto-rotate')
