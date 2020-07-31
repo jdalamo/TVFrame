@@ -40,7 +40,10 @@ class Feh_Manager:
                     feh_thread = Thread(target=self.__restart_feh, args=(mode, photo))
                     feh_thread.start()
                 if mode == 'Single Photo' and photo != last_photo:
-                    feh_thread = Thread(target=self.__restart_feh, args=(mode, photo))
+                    if photo == "":
+                        feh_thread = Thread(target=self.__restart_feh, args=(mode, random.choice(pics)))
+                    else:
+                        feh_thread = Thread(target=self.__restart_feh, args=(mode, photo))
                     feh_thread.start()
             else:
                 if last_mode == 'Default':

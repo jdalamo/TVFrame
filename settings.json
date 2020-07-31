@@ -1,7 +1,7 @@
 {
     "device_name": "JD's TVFrame",
     "mode": "Slideshow",
-    "display_photo": "1.jpg",
+    "display_photo": "",
     "modes": [
         {
             "name": "Slideshow",
