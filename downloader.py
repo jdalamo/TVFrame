@@ -1,6 +1,7 @@
 import base64
 import os
 import re
+import time
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -51,7 +52,7 @@ class Downloader:
                         
                         self.__log(f'Downloaded {filename} from {sender}.')
 
-            # time.sleep(3)
+            time.sleep(5)
 
     def __getFileName(self, currentName):
         fileName, fileExt = os.path.splitext(currentName)
