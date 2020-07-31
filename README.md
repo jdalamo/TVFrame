@@ -19,11 +19,11 @@ TVFrame is a project that emulates the functionality of a "smart" picture frame 
 ---
 This tutorial assumes you already have Raspbian OS running on your Raspberry Pi
 1. Clone the directory onto your Raspberry Pi
-3. Go to https://developers.google.com/gmail/api/quickstart/python
-4. Click "Enable the Drive API" (Make sure the google account you are signed in as is the email you want pictures to be emailed to)
-5. Follow the prompts and then download the user credentials
-6. Copy the json file to TVFrame/config and rename it "credentials.json"
-7. Run the following commands in the cloned directory:
+2. Go to https://developers.google.com/gmail/api/quickstart/python
+3. Click "Enable the Drive API" (Make sure the google account you are signed in as is the email you want pictures to be emailed to)
+4. Follow the prompts and then download the user credentials
+5. Copy the json file to TVFrame/config and rename it "credentials.json"
+6. Run the following commands in the cloned directory:
 
 Note: May need to use pip and python instead of pip3 and python3 if you don't have multiple versions of python installed
 ```
@@ -34,11 +34,13 @@ In a separate terminal window:
 ```
 > python3 setup.py
 ```
-8. In the browser window that opened, select the account you want to use
-9. Click "Advanced"
-10. Click "Go to {App Name}
-11. Click "Allow" twice
-12. The program should now be running on your screen
+7. In the browser window that opened, select the account you want to use
+8. Click "Advanced"
+9. Click "Go to {App Name}
+10. Click "Allow" twice
+11. The program should now be running on your screen
+12. To add pictures to your device email them to the Gmail account you set it up with
+13. Download the [Companion iOS app](https://github.com/jdalamo/TVFrame_App) and build it to your phone to control the display
 
 ## Planned Future Functionality
 ---
