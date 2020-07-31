@@ -33,18 +33,19 @@ Note: May need to use pip and python instead of pip3 and python3 if you don't ha
 
 7. In the browser window that opened, select the account you want to use
 8. Click "Advanced"
-9. Click "Go to {App Name}
+9. Click "Go to {App Name} (unsafe)"
 10. Click "Allow" twice
-11. Run the following command in a separate terminal window:
+11. You can now close the browser window
+12. Run the following command in a separate terminal window:
 
 ```
 > python3 setup.py
 ```
 
-12. Clone the [Companion iOS app](https://github.com/jdalamo/TVFrame_App) and build it to your phone with Xcode
-13. Open the app and scan the QR code on your display
-11. The program should now be running on your screen
-12. To add pictures to your device email them to the Gmail account you set it up with
+13. Clone the [Companion iOS app](https://github.com/jdalamo/TVFrame_App) and build it to your phone with Xcode
+14. Open the app and scan the QR code on your display
+15. The program should now be running on your screen
+16. To add pictures to your device email them to the Gmail account you set it up with
 
 ## Planned Future Functionality
 ---
