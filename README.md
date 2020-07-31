@@ -1,5 +1,4 @@
-# TVFrame
-Smart picture frame software for a Raspberry Pi + Companion iOS app
+# Smart picture frame software for a Raspberry Pi + Companion iOS app
 
 App available [here](https://github.com/jdalamo/TVFrame_App).
 
@@ -14,7 +13,32 @@ TVFrame is a project that emulates the functionality of a "smart" picture frame 
 
 ## Depenencies
 ---
-- Gmail API client library  
+- Gmail API
+
+## Get it running
+---
+1. Ensure you have Python 3 installed on your computer
+2. Clone the directory
+3. Go to https://developers.google.com/gmail/api/quickstart/python
+4. Click "Enable the Drive API" (Make sure the google account you are signed in as is the email you want pictures to be emailed to)
+5. Follow the prompts and then download the user credentials
+6. Copy the json file to TVFrame/config and rename it "credentials.json"
+7. Run the following commands in the cloned directory:
+
+Note: May need to use pip and python instead of pip3 and python3 if you don't have multiple versions of python installed
+```
+> pip3 install -r requirements.txt
+> python3 server.py
+```
+In a separate terminal window:
+```
+> python3 setup.py
+```
+8. In the browser window that opened, select the account you want to use
+9. Click "Advanced"
+10. Click "Go to {App Name}
+11. Click "Allow" twice
+12. The program should now be running on your screen
 
 ## Planned Future Functionality
 ---
