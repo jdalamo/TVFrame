@@ -17,8 +17,8 @@ TVFrame is a project that emulates the functionality of a "smart" picture frame 
 
 ## Get it running
 ---
-1. Ensure you have Python 3 installed on your computer
-2. Clone the directory
+This tutorial assumes you already have Raspbian OS running on your Raspberry Pi
+1. Clone the directory onto your Raspberry Pi
 3. Go to https://developers.google.com/gmail/api/quickstart/python
 4. Click "Enable the Drive API" (Make sure the google account you are signed in as is the email you want pictures to be emailed to)
 5. Follow the prompts and then download the user credentials
