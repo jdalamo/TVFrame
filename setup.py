@@ -48,4 +48,5 @@ def getIP(remote_server="google.com"):
 def feh():
     os.system(f'feh {QR_PATH} -F')
 
-main()
+if __name__ == '__main__':
+    main()
