@@ -2,7 +2,7 @@
 
 App available [here](https://github.com/jdalamo/TVFrame_App).
 
-![TVFrame Logo](media/TVFrame.png)
+![TVFrame Demo Video](https://ibb.co/1M6wR1Z)
 
 ## About
 ---
