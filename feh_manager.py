@@ -9,7 +9,7 @@ class Feh_Manager:
     def __init__(self):
         self.__SETTINGS_PATH = os.path.abspath('settings.json')
         self.__PICS_PATH = os.path.abspath('pics')
-        self.__DEFAULT_IMAGE_PATH = os.path.abspath('default.jpg')
+        self.__DEFAULT_IMAGE_PATH = os.path.abspath('media/default.jpg')
     
     def run(self):
         try:
